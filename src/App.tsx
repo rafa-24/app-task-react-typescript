@@ -1,26 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Fragment, useState } from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+type FormElement = React.FormEvent<HTMLFormElement>
+
+interface Itask {
+  name: string;
+  done: boolean;
 }
 
+function App(): JSX.Element {
+  {/* useState */ }
+  const [newTask, setNewTask] = useState('');
+  const [task, setTask] = useState<Itask[]>([]);
+
+  const handleSubmit = (event: FormElement) => {
+    event.preventDefault();
+    addTask(newTask);
+    setNewTask('')
+    console.log(task);
+  }
+
+  const addTask = (name: string) => {
+    const newTasks = [...task, { name, done: false }];
+    setTask(newTasks);
+  }
+
+  return (
+    <Fragment>
+      <form onSubmit={handleSubmit}>
+        <input type="text" onChange={(e) => setNewTask(e.target.value)} value={newTask} />
+        <button type="submit">Add task</button>
+      </form>
+      {
+        task.map((t: Itask, i: number) => {
+          return <h1 key={i}>{t.name}</h1>
+        })
+      }
+    </Fragment>
+  );
+}
 export default App;
+
+
+
+
+
+
+
+
